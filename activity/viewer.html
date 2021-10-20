@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Blog</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/postView.css">
+    <link rel="stylesheet" href="styles/loader.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container" id="loadingScreen">
+		<div id="loader">
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+		</div>
+	</div>
+
+    <div class="main container">
+        <div class="subContainer">
+            <div id="mainCard" class="card">
+                <div class="card" id="categories"></div>
+    
+                <div id="posts">
+                    <div id="searchbar">
+                        <input autocomplete="off" placeholder="Recherche" id="search" type="text">
+                        <button onclick="search()" id="searchBtn">
+                            <div class="inside"></div><img src="icons/search.png">
+                        </button>
+                    </div>
+    
+                    <div id="postsView">
+                    </div>
+                </div>
+            </div>
+
+            <div id="statusBar">
+                <h1 id="mapName">Carte Climatique</h1>
+                <button onclick="addPost(1)"   id="addBtn">
+                    <div class="inside"></div>
+                    <img src="icons/plus.png">
+                </button>
+                <button onclick="toggleMyPosts()"    id="postButton" class="wideBtn">
+                    <div class="inside"></div>
+                    <p>Mes publications</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popupContainer">
+    </div>
+
+    <!-- VVVVV Debug login screen VVVVVV -->
+    <!-- <div class="container" id="loginPage">
+        <div class="card">
+            <h2>Login</h2>
+            <input placeholder="User id" type="text" id="id">
+            <input placeholder="Token" type="text" id="token">
+
+            <button onclick="login()"><p>&#10140;</p></button>
+        </div>
+    </div> -->
+    <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
+    <script src="scripts/popups.js"></script>
+    <script src="scripts/tools.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/network.js"></script>
+    <script src="scripts/parser.js"></script>
+    <script src="scripts/view.js"></script>
+    <script src="scripts/postView.js"></script>
+    <script src="scripts/flow.js"></script>
+    <script src="scripts/init.js"></script>
+</body>
+
+</html>

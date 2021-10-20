@@ -1,0 +1,252 @@
+@keyframes showText {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes showCtgP {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes openCategorySelector {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 58.53%;
+    }
+}
+
+@keyframes hideChooseCategories {
+    0% {
+        opacity: 1;
+    }
+
+    99% {
+        opacity: 0 !important;
+    }
+
+    100% {
+        display: none !important;
+    }
+}
+
+.flipY img {
+    transform: rotate(180deg);
+}
+
+.flipY {
+    animation: flashShadow 0.5s linear;
+}
+
+@keyframes flashShadow {
+    from {
+        box-shadow: 3px 3px 2px 0 rgb(222 222 230 / 50%), -3px -3px 2px 0 #fefefe;
+    }
+
+    50% {
+        box-shadow: 3px 3px 2px 0 rgb(236 236 245 / 50%), -3px -3px 2px 0 #7c3737 !important;
+    }
+
+    to {
+        box-shadow: 3px 3px 2px 0 rgb(222 222 230 / 50%), -3px -3px 2px 0 #fefefe;
+    }
+}
+
+.goUnder {
+    top: 110% !important;
+}
+
+.closed {
+    width: 0 !important;
+    padding: 0 !important;
+}
+
+.mapContainerOpen {
+    height: 51.1% !important;
+    padding: 1.7% !important;
+    top: 28.45% !important;
+}
+
+.mapContainerOpen .postMap {
+    opacity: 1 !important;
+}
+
+.underMapInput {
+    top: 82.57% !important;
+}
+
+.openPostDescription {
+    height: 59.11% !important;
+    padding: 3% !important;
+    top: 32% !important;
+}
+
+.openPostImages {
+    top: 32% !important;
+    height: 50.6% !important;
+    padding: 1.55vh !important;
+}
+
+.closeCategory {
+    width: 0 !important;
+    padding: 0 !important;
+}
+
+.smooth {
+    transition: 0.5s;
+}
+
+.openedPost .title {
+    height: 5.55vh;
+    display: flex;
+    align-items: center;
+}
+
+.openedPost .picture {
+    margin-bottom: 30%;
+    width: 0 !important;
+    padding: 0;
+    opacity: 0;
+}
+
+.openedPost {
+    height: 56vh;
+    cursor: unset;
+}
+
+.openedPost .content {
+    width: 93%;
+}
+
+.openedDescription {
+    font-size: 1.44vh;
+    animation: enlargeDescription 1s linear;
+    height: 38%;
+}
+
+.openedDate {
+    font-family: FedraDemi;
+    top: 1.8vh;
+    position: absolute;
+    margin-left: 4%;
+    opacity: 1;
+    animation: appear 0.5s linear;
+}
+
+.openCategories {
+    animation: appear 0.5s linear;
+}
+
+.imgMapView {
+    animation: stretchMapView 0.5s linear;
+}
+
+@keyframes stretchMapView {
+    from {
+        height: 0;
+    }
+
+    to {
+        height: 40%;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes postAppear {
+    0% {
+        margin-left: 50% !important;
+        opacity: 0 !important;
+        width: 0 !important;
+    }
+
+    100% {
+        margin-left: 4.5% !important;
+        opacity: 1 !important;
+        width: 90.94% !important;
+    }
+}
+
+@keyframes enlargeTitle {
+    0% {
+        font-size: 2.77vh;
+    }
+
+    40% { 
+        font-size: 4.44vh;
+    }
+
+    100% {
+        font-size: 4.44vh;
+    }
+}
+
+@keyframes enlargeDescription {
+    0% {
+        font-size: 1.33vh;
+    }
+
+    70% { 
+        font-size: 1.44vh;
+    }
+
+    100% {
+        font-size: 1.44vh;
+    }
+}
+
+.postComplete {
+    animation: checkmarkAppear 0.2s ease-in;
+}
+
+@keyframes checkmarkAppear {
+    0% {
+        opacity: 0;
+        top: 6.5vh;
+        transform: rotate(90deg);
+    }
+
+    100% {
+        opacity: 1;
+        top: 3.555vh;
+        transform: rotate(0deg);
+    }
+}
+
+.loading {
+    background-color: rgba(0, 0, 0, 0.253) !important;
+}
+
+.left {
+    transform: translate(-50vh) scale(0.1) !important;
+    opacity: 0 !important;
+}
+
+.right {
+    transform: translate(50vh) scale(0.1) !important;
+    opacity: 0 !important;
+}

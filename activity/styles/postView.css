@@ -1,0 +1,397 @@
+.postView .postTitle, .postView .postStageExpl, .postView .button, #stages, #chars {
+    animation: showText 1s linear;
+}
+
+.cardPostView #search {
+    width: 0;
+}
+
+.cardPostView #searchbar {
+    opacity: 0;
+}
+
+.cardPostView #postsView {
+    margin-top: 50% !important;
+    height: 0 !important;
+}
+
+.postView {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+.postView .openedPost {
+    position: absolute;
+    overflow: hidden;
+    width: 79.38%;
+    height: 79.55%;
+    margin: 0 !important;
+    display: flex;
+    justify-content: center;
+}
+
+.postView .openedPost .image {
+    top: 2.95%;
+}
+
+.postView .content {
+    width: 74.1%;
+    margin: 0 !important;
+}
+
+.postTitle {
+    transition: 0.5s;
+    width: 71%;
+    position: absolute;
+    color: #98B2D4;
+    font-size: 6.66vh;
+    top: 6.6%;
+}
+
+.postStageExpl {
+    transition: 0.5s;
+    width: 71%;
+    font-family: FedraBook;
+    color: #CBCBD0;
+    position: absolute;
+    font-size: 3.33vh;
+    top: 19.65%;
+}
+
+.postInput, .postDescription {
+    position: absolute;
+    border-radius: 2.11vh;
+    font-family: FedraDemi;
+    font-size: 2.78vh;
+    font-weight: 500;
+    color: #98B2D4;
+    transition: 0.5s;
+}
+
+.postInput::placeholder, .postDescription::placeholder {
+    color: #CBCBD0;
+}
+
+.postInput {
+    padding: 3%;
+    height: 11.63%;
+    width: 58.53%;
+    top: 44.18%;
+    box-shadow: inset -2px -2px 4px 0 #FEFEFE, inset 2px 2px 4px 0 rgba(222,222,230,0.5);
+}
+
+.postDescription {
+    transition: 0.8s !important;
+    color: #5C7CA6 !important;
+    border: none;
+    width: 79.26%;
+    height: 0%;
+    padding: 0%;
+    top: 50%;
+    background-color: transparent;
+    resize: none;
+    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
+}
+
+.chooseCategories {
+    left: 6%;
+    top: 32%;
+    position: absolute;
+    color: #CDCDD3;
+    font-family: FedraDemi;
+    font-size: 2.78vh;
+    font-weight: 500;
+}
+
+.hideChooseCategories {
+    animation: hideChooseCategories 0.2s linear !important;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.selector {
+    opacity: 0;
+    transition: 0.5s;
+    overflow: auto;
+    min-height: 8.677vh;
+    height: 8.677vh;
+    width: 48.17%;
+    white-space: nowrap;
+    border-radius: 2.111vh;
+    box-shadow: 3px 3px 2px 0 rgba(222,222,230,0.5), -3px -3px 2px 0 #FEFEFE;
+    display: flex;
+    position: absolute;
+    top: 44.2%;
+    left: 20.73%;
+}
+
+.dropdown {
+    opacity: 0;
+    transition: 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 67.75%;
+    width: 8.72%;
+    height: 11.63%;
+    margin-left: 2.8%;
+    font-size: 3vh;
+    border-radius: 2.111vh;
+    box-shadow: 3px 3px 2px 0 rgba(222,222,230,0.5), -3px -3px 2px 0 #FEFEFE;
+    cursor: pointer;
+}
+
+.dropdown img {
+    transition: 0.5s;
+    width: 36%;
+}
+
+.categories {
+    transition: 0.7s;
+    position: absolute;
+    top: 58%;
+    right: 31%;
+    width: 48.17%;
+    height: 26.1vh;
+    padding: 1.9vh;
+    border-radius: 2.111vh;
+    box-shadow: inset -2px -2px 4px 0 #FEFEFE, inset 2px 2px 4px 0 rgba(222,222,230,0.5);
+
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 1vh;
+}
+
+.row {
+    width: 100%;   
+    display: flex;
+    margin-top: 1vh;
+}
+
+.row:first-of-type {
+    margin: 0;
+}
+
+.categoriesInPost {
+    align-items: flex-start;
+    height: 100%;
+    padding: 1.9vh;
+    width: max-content;
+    display: hidden;
+    position: relative;
+    overflow: auto;
+    justify-content: center;
+
+    display: flex;
+    gap: 1.44vh;
+}
+
+.expandedCategories {
+    flex-wrap: wrap;
+    align-content: flex-start;
+    min-width: 45.53vh;
+    justify-content: flex-start !important;
+}
+
+.addPostCategory {
+    flex-shrink: 0;
+    overflow: hidden;
+    padding-left: 1.33vh;
+    border-radius: 0.666vh;
+    padding-right: 0.7vh;
+    width: fit-content;
+    height: 4.88vh;
+    box-shadow: 3px 3px 4px 0 rgba(222,222,230,0.5), -3px -3px 4px 0 #FEFEFE;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.addPostCategory p {
+    color: #78A6D1;
+    font-weight: 500;
+    font-size: 2.77vh;
+    margin-right: 0.68vh;
+    min-width: 15.94vh;
+    animation: showText 0.5s linear;
+}
+
+.categoryIcon {
+    cursor: pointer;
+    font-size: 2.55vh;
+    transition: 0.4s;
+}
+
+.categoryIcon img {
+    width: 1.5vh;
+}
+
+.hidden {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.postMapContainer {
+    position: absolute;
+    top: 50%;
+    border-radius: 1.666vh;
+    width: 79.26%;
+    height: 0%;
+    padding: 0%;
+    transition: 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
+}
+
+.postMap {
+    border-radius: 1vh;
+    width: 100%;
+    height: 100%;
+    box-shadow: 2px 2px 3px 0 rgba(222,222,230,0.5), -1px -1px 3px 0 #FEFEFE;
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.postMap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 1vh;
+}
+
+.wrongLink {
+    opacity: 0;
+    transition: 0.2s;
+    width: 58.53%;
+    position: absolute;
+    top: 59.11%;
+    color: #E86F6F;
+    font-size: 2.44vh;
+    text-align: center;
+}
+
+.postImages {
+    overflow: hidden;
+    transition: 0.5s;
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    top: 50%;
+    width: 77%;
+    height: 0%;
+    padding: 0vh;
+    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
+    border-radius: 2.11vh;
+    gap: 1.44vh;
+}
+
+.postImgContainer {
+    width: 22.11vh;
+    height: 15.61vh;
+    background-color: rgb(173, 173, 173);
+    border-radius: 1vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.postImgContainer img:first-child {
+    border-radius: 1vh;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remImage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1.2vh;
+    height: 8.5% !important;
+    cursor: pointer;
+}
+
+.postView .openedPost .date {
+    left: 9.8vh;
+    margin: 0;
+}
+
+#download {
+    transition: 0.5s;
+    position: absolute;
+    top: 85.53%;
+}
+
+#downloadInput {
+    display: none;
+}
+
+#download img {
+    width: 25%;
+}
+
+#stages {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 1.777vh;
+    right: 2vh;
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+#stages span {
+    color: #EAAC7F;
+    font-family: FedraDemi;
+    font-size: 2.666vh;
+}
+
+#chars {
+    position: absolute;
+    bottom: 1.9vh;
+    display: flex;
+    justify-content: center;
+}
+
+#chars span {
+    color: rgba(89,107,128,0.4);
+    font-size: 2.222vh;
+    font-family: FedraDemi;
+}
+
+#previewText {
+    color: #E86F6F;
+    transition: 0.5s;
+    position: absolute;
+    font-size: 2.444vh;
+    right: 3vh;
+    top: 2vh;
+    pointer-events: none;
+}
+
+.postComplete {
+    position: absolute;
+    width: 5.555vh;
+    top: 3.555vh;
+}
+
+.imageText {
+    position: absolute;
+    top: 13.333vh;
+    left: 25%;
+    width: 50%;
+    text-align: center;
+    font-family: FedraDemi;
+    font-size: 2.777vh;
+    color: #CBCBD0;
+}
