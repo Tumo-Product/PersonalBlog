@@ -1,5 +1,5 @@
 const parser = {
-    getMapLink          : (longitude, latitude, lang) => {
+    getVideoLink          : (longitude, latitude, lang) => {
         if (longitude == undefined || latitude == undefined) {
             return "";
         }
@@ -20,15 +20,9 @@ const parser = {
     isDescriptionCorrect: (description) => {
         return description.length <= 600 && description.length >= 200;
     },
-    isURLValid          : (urlString) => {
-        let url;
-        try {
-            url = new URL(urlString);
-        } catch (e) {
-            return false;  
-        }
-      
-        return true;
+    isURLValid          : (string) => {
+        if (string.includes("<iframe src=") && string.includes(`width="640" height="480" allow="autoplay"></iframe>`)) return true;
+        else return false;
     },
     getCorrectFontSize  : (length) => {
         let fontSize = 50 / length * 2.2;

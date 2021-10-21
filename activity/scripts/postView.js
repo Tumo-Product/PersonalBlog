@@ -132,7 +132,7 @@ const postView = {
         postView.disableDraftBtn();
         $("#addBtn").removeAttr("disabled").removeClass("disableApproveBtn");
 
-        $("#postButton p").text("Enregistrer le brouillon");
+        $("#postButton").show();
         if (editing) $("#postButton").attr("onclick", "popups.createPopup('edit')");
         else $("#postButton").attr("onclick", `popups.createPopup('draft');`);
 
@@ -194,7 +194,6 @@ const postView = {
         }
 
         if (postCategories.length > 0) postView.disablePlusIcons();
-
         if ($(".categoriesInPost").children().length != 0) {
             let scrollAmount = $(".categoriesInPost").prop("scrollWidth");
             $(".categoriesInPost").animate({ scrollLeft: scrollAmount }, 700);
@@ -270,11 +269,9 @@ const postView = {
             $(`#pc_${i}`).css("width", width);
         }
     },
-    setupMapView   : async () => {
+    setupVideoView   : async () => {
         $(".postView").append(`
-            <div class="postMapContainer">
-                <div class="postMap"><iframe src=""></iframe></div>
-            </div>
+            <div class="postMapContainer"></div>
             <input autocomplete="off" type="url" class="postInput closed" id="linkInput" placeholder="Colle ton lien ici">
             <p class="wrongLink">Le lien est invalide.</p>
         `); await timeout(50);
@@ -282,28 +279,28 @@ const postView = {
 
         return $("#linkInput");
     },
-    addPostMap      : async (embedSrc) => {
+    addVideoEmbed      : async (embed) => {
         document.getElementById("linkInput").readOnly = true;
 
-        if ($(".postMapContainer iframe").attr("src") === "") {
+        if ($(".postMapContainer iframe").length == 0) {
             $(".wrongLink").css("opacity", 0);          await timeout(200);
-            $(".postMapContainer iframe").attr("src", embedSrc);
+            $(".postMapContainer iframe").remove();
+            $(".postMapContainer").append(embed);
             $("#linkInput").addClass("underMapInput");  await timeout(100);
             $(".postMapContainer").addClass("mapContainerOpen");
         }
 
         document.getElementById("linkInput").readOnly = false;
     },
-    removePostMap   : async () => {
+    removeVideoEmbed   : async () => {
         document.getElementById("linkInput").readOnly = true;
 
-        $(".postMapContainer iframe").attr("src", "");
+        $(".postMapContainer iframe").remove();
         $(".postMapContainer").removeClass("mapContainerOpen");
         if ($(".postMapContainer").height() == 0)
             $(".wrongLink").css("opacity", 1);
         await timeout(170); $("#linkInput").removeClass("underMapInput");
-        await timeout(500);
-        $(".wrongLink").css("opacity", 1);
+        await timeout(500); $(".wrongLink").css("opacity", 1);
 
         document.getElementById("linkInput").readOnly = false;
     },
@@ -343,7 +340,7 @@ const postView = {
 
         return $(".postImages");
     },
-    setupPreview    : async (post, mapEmbed) => {
+    setupPreview    : async (post, videoLink) => {
         $("#addBtn img").attr("src", "icons/checkmark.svg");
         if (!editing) {
             $("#addBtn").attr("onclick", `popups.createPopup('complete');`);
@@ -352,7 +349,7 @@ const postView = {
         }
         $(".postTitle").css("opacity", 0);
         $(".postStageExpl").css("opacity", 0);
-        $("#stages").css("opacity",  0);
+        $("#stages").css("opacity", 0);
         await timeout(400);
 
         view.currImage = 0;
@@ -370,7 +367,7 @@ const postView = {
                     <img onclick="view.scrollPhoto(-1)" class="leftImgBtn" src="icons/thin_arrow.svg">
                     <div class="imageView"></div>
                     <img onclick="view.scrollPhoto(1)" class="rightImgBtn" src="icons/thin_arrow.svg">
-                    <div class="mapContainer"><div class="mapCrop"><iframe class="map" src="${mapEmbed}"></iframe></div></div>
+                    <div class="mapContainer"><div class="mapCrop">${videoLink}</div></div>
                 </div>
                 <p class="description">${post.description}</p>
             </div>
@@ -379,9 +376,7 @@ const postView = {
 
         let titleFontSize = parser.getCorrectFontSize($(`.postView .openedPost .title`).text().length);
         $(`.postView .openedPost .title`).css("font-size", `${titleFontSize}vh`);
-
         $(".openCategories").append(`<span class="card">${post.categories[0]}</span>`);
-
         $(`.imageView`).append(`<div id="img_${0}" class="image"><img src="${post.images[0]}"></div>`);
         view.offset = parseFloat($(`#img_${0}`).css("width")) / window.innerHeight * 100;
 
@@ -391,6 +386,7 @@ const postView = {
             $(`#img_${i}`).css("left", `${view.offset * i}vh`);
         }
 
+        $(".mapContainer").click(() => { openVideo(videoLink); });
         await timeout(100);
         $(".image").addClass("smooth");
     },

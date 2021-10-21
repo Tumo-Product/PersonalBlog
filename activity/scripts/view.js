@@ -79,6 +79,22 @@ const view      = {
         $(".popupContainer").addClass("loading");
     },
 
+    openVideo       : async (video) => {
+        $(".popupContainer").append(`
+            <div class="card imagePopup" style="display: none">
+                ${video}
+            </div>
+        `);
+
+        $(".imagePopup iframe").attr("id", "popupVideo");
+
+        document.getElementById("popupVideo").onload = async () => {
+            // $(".popupContainer .stage").remove(); await timeout(50);
+            $(".popupContainer").removeClass("loading");
+            $("#popupVideo").parent().show();
+        }
+    },
+
     openImage       : async (images, imgIndex) => {
         $(".popupContainer").empty(); await timeout(50);
         $(".popupContainer").removeClass("loading");
@@ -97,6 +113,8 @@ const view      = {
         }
 
         $(".imagePopup").each(function(i) {
+            $(this).css("pointer-events", "none");
+            
             if (i < imgIndex) {
                 $(this).addClass("left");
             } else if (i > imgIndex) {
@@ -123,12 +141,13 @@ const view      = {
     },
 
     closePopupContainer      : async () => {
-        $(".popupContainer").css({"opacity": 0, "pointer-events": "none"}); await timeout(500);
+        $(".popupContainer").css({"opacity": 0, "pointer-events": "none"}); await timeout(100);
         $(".popupContainer").empty();
         view.currPopupImg = 0;
     },
 
-    openPost        : async (index, categories, images, mapSrc, mapLink) => {
+    openPost        : async (index, categories, images, videoLink) => {
+        $("#postButton").show();
         postOpen = index;
         if (categories.length === 0) categories = ["N/A"];
         $(`#p_${index}`).attr("onclick", "");
@@ -160,13 +179,10 @@ const view      = {
                 <img onclick="view.scrollPhoto(-1)" class="leftImgBtn"    src="icons/thin_arrow.svg">
                 <div class="imageView"></div>
                 <img onclick="view.scrollPhoto(1)" class="rightImgBtn"   src="icons/thin_arrow.svg">
-                <div class="mapContainer"></div>
+                <div class="mapContainer"><div class="mapCrop">${videoLink}</div></div>
             </div>
         `);
-        $(".mapContainer").click(function() { window.open(mapLink, "_blank"); });
-
-        view.makeMap(mapSrc, ".mapContainer");
-        $(".map").contents().find(".place-card").hide();
+        $(".mapContainer").click(() => { openVideo(videoLink); });
 
         $(`#p_${index} .date`).clone().prependTo(`#p_${index}`);
         $(`#p_${index} .spanDiv`).empty();
@@ -206,6 +222,7 @@ const view      = {
         $(".minimize").css("opacity", 1);
     },
     closePost       : async (index, categories) => {
+        $("#postButton").hide();
         if (categories.length == 0) categories = ["N/A"];
         view.currImage = 0;
         $(`#p_${index} .description`).css("opacity", 0);

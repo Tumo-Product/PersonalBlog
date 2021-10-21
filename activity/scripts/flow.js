@@ -1,11 +1,10 @@
-let data, userData, queryData = [];
+let data, queryData = [];
 let categories, posts   = [];
 let loading = false, editing = false;
-let post                = { categories: [], longitude: -1, latitude: -1, title: "",  description: "", images: [], mapLink: undefined, activityId: undefined };
+let post                = { categories: [], title: "",  description: "", images: [], videoLink: undefined, activityId: undefined };
 let currUid             = "1";
 let postStage           = -1;
 let filesToAdd          = [];
-let myPostsActive       = false;
 let categoriesStates    = [];
 let postCount           = 0;
 let postOpen            = -1;
@@ -18,25 +17,8 @@ const timeout = (ms) => {
 }
 
 const dataInit = async (pid) => {
-    userData = await network.getUserPosts(currUid);
-    data = await network.getPosts();
-    data = data.data.data; userData = userData.data.data;
-
-    let publishedData = [];
-    let underModeration = [];
-    for (let i = data.length - 1; i >= 0; i--) {
-
-        if (data[i].status === "published") {
-            publishedData.push(data[i]);
-
-            
-        } else if (data[i].status === "moderation") {
-            underModeration.push(data[i]);
-            if (data[i].post.activityId === activityId){
-                view.disableApproveBtn();
-            }
-        }
-    }
+    data = await network.getUserPosts(currUid);
+    data = data.data.data;
     
     if (pid) {
         for (let i = 0; i < data.length; i++) {
@@ -44,22 +26,13 @@ const dataInit = async (pid) => {
                 data = [data[i]];
 
                 if (mod) view.setupModView();
-                for (let i = 0; i < data.length; i++)       { data[i].imageNames        = data[i].post.images;      }
-                for (let i = 0; i < userData.length; i++)   { userData[i].imageNames    = userData[i].post.images;  }
+                for (let i = 0; i < data.length; i++)   { data[i].imageNames    = data[i].post.images;  }
                 return;
             }
         }
     }
 
-    if (!mod) {
-        data = publishedData;
-    } else {
-        data = underModeration;
-        view.setupModView();
-    }
-
-    for (let i = 0; i < data.length; i++)       { data[i].imageNames        = data[i].post.images;      }
-    for (let i = 0; i < userData.length; i++)   { userData[i].imageNames    = userData[i].post.images;  }
+    for (let i = 0; i < data.length; i++)   { data[i].imageNames    = data[i].post.images;  }
 }
 
 const onLoad = async (isMod, uid, pid, actvtId) => {
@@ -69,7 +42,7 @@ const onLoad = async (isMod, uid, pid, actvtId) => {
     await dataInit(pid);
     
     network.getNewToken();
-    await addPosts("all");
+    await addPosts();
 
     for (let i = 0; i < categories.length; i++) {
         view.addCategory(i, categories[i]);
@@ -95,7 +68,7 @@ const handleInitialEvents = async () => {
     });
     $('#postsView').on('scroll', async function(e) {
         if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && postOpen == -1) {
-            let length = myPostsActive === true ? userData.length : data.length;
+            let length = data.length;
             if (queryData.length > 0) {
                 length = queryData.length;
             }
@@ -108,7 +81,7 @@ const handleInitialEvents = async () => {
                     </div>`
                 );
 
-                await addPosts(myPostsActive ? "user" : "all");
+                await addPosts();
                 loading = false;
                 $(".stage").remove();
             }
@@ -122,8 +95,8 @@ const resetPosts = async () => {
     $(".post").remove();
 }
 
-const addPosts = async (type) => {
-    let dat     = type === "user" ? userData : data;
+const addPosts = async () => {
+    let dat     = data;
     if (queryData.length > 0) dat = queryData;
     let length  = 10;
     
@@ -144,7 +117,7 @@ const addPosts = async (type) => {
 }
 
 const toggleCategory = async (index) => {
-    let dat = myPostsActive ? userData : data;
+    let dat = data;
     view.toggleCategory(index, categoriesStates[index]);
     categoriesStates[index] = !categoriesStates[index];
     postCount = 0; postOpen = -1; queryData = [];
@@ -163,7 +136,7 @@ const toggleCategory = async (index) => {
         }
 
         if (queryData.length > 0)
-            await addPosts(myPostsActive ? "user" : "all");
+            await addPosts();
     }, 500);
 
     if (!categoriesStates.includes(true)) {
@@ -220,7 +193,7 @@ const addPost = async (dir) => {
             await postHandlers.handleCategories();
             break;
         case 2:
-            await postHandlers.handleMap();
+            await postHandlers.handleVideo();
             break;
         case 3:
             await postHandlers.handleDescription();
@@ -260,7 +233,7 @@ const saveDraft = async () => {
 }
 
 const updatePost = async (status) => {
-    await network.updatePost(userData[postOpen].pid, post, filesToAdd, imagesToRemove, status);
+    await network.updatePost(data[postOpen].pid, post, filesToAdd, imagesToRemove, status);
     let msg;
     if (status === "draft" || status === "rejected") msg = "Ton brouillon a été enregistré";
     else                                             msg = "Ta publication est envoyée à l'approbation.";
@@ -269,8 +242,8 @@ const updatePost = async (status) => {
 }
 
 const deletePost = async () => {
-    imagesToRemove = userData[postOpen].imageNames;
-    await network.deletePost(userData[postOpen].pid, imagesToRemove);
+    imagesToRemove = data[postOpen].imageNames;
+    await network.deletePost(data[postOpen].pid, imagesToRemove);
     await postView.postComplete("Ton brouillon a été supprimé.");
     await discardPost();
 }
@@ -285,11 +258,16 @@ const discardPost = async () => {
 }
 
 const openImage = async (i, imgIndex) => {
-    let dat = myPostsActive ? userData : data;
+    let dat = data;
     let pid = dat[i].pid;
     view.openLoading();
     let images  = await network.getImages(pid, dat[i].imageNames, "standard");
     view.openImage(images, imgIndex);
+}
+
+const openVideo = async (video) => {
+    view.openLoading();
+    view.openVideo(video);
 }
 
 const postHandlers = {
@@ -330,34 +308,28 @@ const postHandlers = {
         postView.enableBtn("left");
         await postView.setupCategoryView(post.categories);
     },
-    handleMap: async () => {
+    handleVideo: async () => {
         $(".categoriesInPost").children().each(function() {
             post.categories.push($(this).find("p").text());
         });
 
-        let mapInput = await postView.setupMapView();
-        mapInput.on("input", async function() {
+        let videoInput = await postView.setupVideoView();
+        videoInput.on("input", async function() {
             if (parser.isURLValid($(this).val())) {
                 postView.enableBtn("right");
 
-                post.mapLink    = $(this).val();
-                let mapCoords   = parser.getCoords(post.mapLink);
-                let mapEmbed    = parser.getMapLink(mapCoords.longitude, mapCoords.latitude);
-                post.longitude  = mapCoords.longitude;
-                post.latitude   = mapCoords.latitude;
-                await postView.addPostMap(mapEmbed);
+                post.videoLink    = $(this).val();
+                await postView.addVideoEmbed($(this).val());
             } else {
-                post.mapLink    = undefined;
-                postView.disableBtn("right");
-                await postView.removePostMap();
+                post.videoLink    = undefined;
+                // postView.disableBtn("right");
+                await postView.removeVideoEmbed();
             }
         });
 
-        if (post.mapLink !== undefined) {
-            mapInput.val(post.mapLink);
-            let mapCoords = parser.getCoords(post.mapLink);
-            let mapEmbed  = parser.getMapLink(mapCoords.longitude, mapCoords.latitude);
-            await postView.addPostMap(mapEmbed);
+        if (post.videoLink !== undefined) {
+            videoInput.val(post.videoLink);
+            await postView.addVideoEmbed(post.videoLink);
             postView.enableBtn("right");
         }
     },
@@ -378,9 +350,9 @@ const postHandlers = {
     handleImages: async () => {
         if (post.images.length == 6) return;
         let downloadInput = await postView.setupImageView(post.images);
-        if (postOpen != -1 && editing && userData) {
-            if (userData[postOpen].imageNames.length > 0) {
-                postImageNames = userData[postOpen].imageNames;
+        if (postOpen != -1 && editing && data) {
+            if (data[postOpen].imageNames.length > 0) {
+                postImageNames = data[postOpen].imageNames;
             }
         }
 
@@ -407,8 +379,7 @@ const postHandlers = {
         });
     },
     handleFinalView : async () => {
-        let mapEmbed  = parser.getMapLink(post.longitude, post.latitude);
-        await postView.setupPreview(post, mapEmbed);
+        await postView.setupPreview(post, post.videoLink);
     }
 }
 
@@ -436,6 +407,7 @@ const addImage = async (dragFiles) => {
         postView.addImage(filesToAdd.length - 1, basedat, "new");
     }
 
+    // if video link is undefined only then check for this
     if (post.images.length > 0) postView.enableBtn("right");
     else postView.disableBtn("right");
 }
@@ -456,13 +428,12 @@ const removeImage = async (i, type) => {
 }
 
 const openPost = async (i) => {
-    let mapSrc = parser.getMapLink(posts[i].longitude, posts[i].latitude);
-    if (userData.length > 0) {
-        if (userData[i].status === "draft" || userData[i].status === "rejected" && myPostsActive) {
+    if (data.length > 0) {
+        if (data[i].status === "draft" || data[i].status === "rejected") {
             view.enableEditButton("editPost()");
         }
     }
-    await view.openPost(i, posts[i].categories, posts[i].images, mapSrc, posts[i].mapLink);
+    await view.openPost(i, posts[i].categories, posts[i].images, posts[i].videoLink);
     if (mod) view.enableApproveBtn();
 }
 
@@ -479,33 +450,10 @@ const editPost = async () => {
     resetPosts();
 }
 
-const toggleMyPosts = async () => {
-    queryData = [];
-    $("#postsView").css("overflow", "auto"); postOpen = 1;
-    if (!myPostsActive) {
-        $("#postButton p").text("Toutes les publications");
-        await view.closePostsView();
-        view.disableCategories();
-        resetPosts();
-        await addPosts("user");
-        await view.openPostsView();
-    } else {
-        $("#postButton p").text("Mes publications");
-        await view.closePostsView();
-        view.enableCategories();
-        resetPosts();
-        await addPosts("all");
-        await view.openPostsView();
-    }
-
-    postOpen = -1;
-    myPostsActive = !myPostsActive;
-}
-
 const search = async () => {
     let query = $("#search").val();
     let matches = [];
-    let dat = myPostsActive ? userData : data;
+    let dat = data;
     postCount = 0; postOpen = -1; queryData = [];
 
     view.hidePosts();
@@ -516,7 +464,7 @@ const search = async () => {
             queryData.push(dat[matches[i]]);
         }
         if (queryData.length > 0)
-            await addPosts(myPostsActive ? "user" : "all");
+            await addPosts();
     }, 500);
 
     for (let i = 0; i < dat.length; i++) {
