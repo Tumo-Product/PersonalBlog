@@ -70,6 +70,8 @@ const view      = {
     },
 
     openLoading     : async () => {
+        $(".popup").hide();
+
         $(".popupContainer").append(`
             <div class="stage">
                 <div class="dot-bricks"></div>
@@ -147,7 +149,6 @@ const view      = {
     },
 
     openPost        : async (index, categories, images, videoLink) => {
-        $("#postButton").show();
         postOpen = index;
         if (categories.length === 0) categories = ["N/A"];
         $(`#p_${index}`).attr("onclick", "");

@@ -73,7 +73,7 @@ const popups = {
                 <p class="mainMsg">Évaluez le travail de l'étudiant·e </p>
                 <button onclick="changeStatus('rejected')" id="draftButton" class="wideBtn">
                     <div class="inside"></div>
-                    <p>Reject</p>
+                    <p>Rejeté</p>
                 </button>
                 <button onclick="changeStatus('published')" id="publishButton" class="wideBtn">
                     <div class="inside"></div>

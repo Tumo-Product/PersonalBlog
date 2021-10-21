@@ -23,6 +23,8 @@ const postView = {
     },
 
     postComplete    : async (msg) => {
+        $(".stage").remove();
+        $(".popup").show();
         $(".popup button").css("opacity", 0);                       // Fade out and remove buttons
         setTimeout(() => { $(".popup button").remove(); }, 500);
 
