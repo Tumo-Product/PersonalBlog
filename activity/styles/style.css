@@ -116,6 +116,8 @@ iframe {
 }
 
 .imgMapView {
+    display: flex;
+    justify-content: center;
     overflow: hidden;
     transition: 0.5s;
     height: 40%;

@@ -29,7 +29,7 @@ const view      = {
             <p>#${text}</p><div class="inside"></div>
         </button>`);
     },
-    addPost         : (index, title, date, categories, description, img, status) => {
+    addPost         : (index, title, date, categories, description, img, videoLink, status) => {
         if (title === "") title = "N/A";
         if (categories.length === 0) categories = ["N/A"];
         if (description === "") description = "No description added";
@@ -52,7 +52,7 @@ const view      = {
 
         if (img === "") {
             $(`#p_${index} img`).remove();
-            $(`#p_${index} .picture`).append("<div><p>N/A</p></div>");
+            $(`#p_${index} .picture`).append(`<div class="mapCrop">${videoLink}</div>`);
         }
         if (description === "No description added") {
             $(`#p_${index} .description`).addClass("draftDescription");
@@ -89,7 +89,7 @@ const view      = {
         $(".imagePopup iframe").attr("id", "popupVideo");
 
         document.getElementById("popupVideo").onload = async () => {
-            // $(".popupContainer .stage").remove(); await timeout(50);
+            $(".popupContainer .stage").remove(); await timeout(50);
             $(".popupContainer").removeClass("loading");
             $("#popupVideo").parent().show();
         }
@@ -183,6 +183,12 @@ const view      = {
             </div>
         `);
         $(".mapContainer").click(() => { openVideo(videoLink); });
+        if (videoLink === undefined) $(".mapContainer").remove();
+        if (images.length === 0) {
+            $(".leftImgBtn").remove();
+            $(".rightImgBtn").remove();
+            $(".imageView").remove();
+        }
 
         $(`#p_${index} .date`).clone().prependTo(`#p_${index}`);
         $(`#p_${index} .spanDiv`).empty();

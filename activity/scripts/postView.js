@@ -272,7 +272,7 @@ const postView = {
     setupVideoView   : async () => {
         $(".postView").append(`
             <div class="postMapContainer"></div>
-            <input autocomplete="off" type="url" class="postInput closed" id="linkInput" placeholder="Colle ton lien ici">
+            <input autocomplete="off" type="url" class="postInput closed" id="linkInput" placeholder="Incorporer ton video ici">
             <p class="wrongLink">Le lien est invalide.</p>
         `); await timeout(50);
         $("#linkInput").removeClass("closed");
@@ -373,6 +373,12 @@ const postView = {
             </div>
         </div>
         `);
+        if (videoLink === undefined) $(".mapContainer").remove();
+        if (post.images.length === 0) {
+            $(".leftImgBtn").remove();
+            $(".rightImgBtn").remove();
+            $(".imageView").remove();
+        }
 
         let titleFontSize = parser.getCorrectFontSize($(`.postView .openedPost .title`).text().length);
         $(`.postView .openedPost .title`).css("font-size", `${titleFontSize}vh`);

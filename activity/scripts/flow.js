@@ -109,7 +109,7 @@ const addPosts = async () => {
     }
 
     for (let i = postCount; i < posts.length; i++) {
-        view.addPost(i, posts[i].title, posts[i].date, posts[i].categories, posts[i].description, posts[i].images[0], dat[i].status);
+        view.addPost(i, posts[i].title, posts[i].date, posts[i].categories, posts[i].description, posts[i].images[0], posts[i].videoLink, dat[i].status);
         view.makePostAppear(i);
     }
 
@@ -309,6 +309,8 @@ const postHandlers = {
         await postView.setupCategoryView(post.categories);
     },
     handleVideo: async () => {
+        postView.enableBtn("right");
+
         $(".categoriesInPost").children().each(function() {
             post.categories.push($(this).find("p").text());
         });
@@ -348,6 +350,11 @@ const postHandlers = {
         });
     },
     handleImages: async () => {
+        postView.enableBtn("right");
+        if (post.videoLink === undefined) {
+            postView.disableBtn("right");
+        }
+
         if (post.images.length == 6) return;
         let downloadInput = await postView.setupImageView(post.images);
         if (postOpen != -1 && editing && data) {
@@ -407,9 +414,10 @@ const addImage = async (dragFiles) => {
         postView.addImage(filesToAdd.length - 1, basedat, "new");
     }
 
-    // if video link is undefined only then check for this
-    if (post.images.length > 0) postView.enableBtn("right");
-    else postView.disableBtn("right");
+    if (post.videoLink === undefined) {
+        if (post.images.length > 0) postView.enableBtn("right");
+        else postView.disableBtn("right");
+    }
 }
 
 const removeImage = async (i, type) => {
@@ -423,8 +431,10 @@ const removeImage = async (i, type) => {
     }
 
     postView.removeImage(i, type);
-    if (post.images.length > 0) postView.enableBtn("right");
-    else                        postView.disableBtn("right");
+    if (post.videoLink === undefined) {
+        if (post.images.length > 0) postView.enableBtn("right");
+        else                        postView.disableBtn("right");
+    }
 }
 
 const openPost = async (i) => {
