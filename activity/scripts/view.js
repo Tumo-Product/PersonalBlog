@@ -50,7 +50,11 @@ const view      = {
             </div>
         </div>`);
 
-        if (img === "") {
+        if (img === "" && videoLink === undefined) {
+            $(`#p_${index} img`).remove();
+            $(`#p_${index} .picture`).append("<div><p>N/A</p></div>");   
+        }
+        else if (img === "") {
             $(`#p_${index} img`).remove();
             $(`#p_${index} .picture`).append(`<div class="mapCrop">${videoLink}</div>`);
         }
@@ -184,11 +188,14 @@ const view      = {
             </div>
         `);
         $(".mapContainer").click(() => { openVideo(videoLink); });
-        if (videoLink === undefined) $(".mapContainer").remove();
-        if (images.length === 0) {
-            $(".leftImgBtn").remove();
-            $(".rightImgBtn").remove();
-            $(".imageView").remove();
+        if (images.length === 0 && videoLink === undefined) $(".mapContainer").remove();
+        else {
+            if (videoLink === undefined) $(".mapContainer").remove();
+            if (images.length === 0) {
+                $(".leftImgBtn").remove();
+                $(".rightImgBtn").remove();
+                $(".imageView").remove();
+            }
         }
 
         $(`#p_${index} .date`).clone().prependTo(`#p_${index}`);

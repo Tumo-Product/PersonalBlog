@@ -324,18 +324,17 @@ const postHandlers = {
         videoInput.on("input", async function() {
             if (parser.isURLValid($(this).val())) {
                 postView.enableBtn("right");
-
-                post.videoLink    = $(this).val();
+                post.videoLink = $(this).val();
                 await postView.addVideoEmbed($(this).val());
             } else {
-                post.videoLink    = undefined;
+                post.videoLink = undefined;
                 postView.disableBtn("right");
                 await postView.removeVideoEmbed();
             }
 
             if ($(this).val() === undefined || $(this).val() === "") {
                 post.videoLink = undefined;
-                postView.disableBtn("right");
+                postView.enableBtn("right");
             }
         });
 
