@@ -1,7 +1,7 @@
 let uid = "1";
 let actvtId;
 
-$(onLoad(false, uid, undefined, actvtId)); // Test case.
+// $(onLoad(false, uid, undefined, actvtId)); // Test case.
 
 const initialize = () => {
     window.parent.postMessage({
@@ -40,4 +40,4 @@ const initialize = () => {
     }, '*');
 }
 
-// initialize();
+initialize();
