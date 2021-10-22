@@ -141,10 +141,9 @@ const network   = {
 
     getCategories   : async () => {
         return [
-            "Architecture écologique",
-            "Gaspillage alimentaire",
-            "Le recyclage",
-            "Les jardins de Paris"
+            "Utiliser le blog des épluchures",
+            "Les vêtements",
+            "Réduire tes Déchets Électroniques"
         ];
     },
 
