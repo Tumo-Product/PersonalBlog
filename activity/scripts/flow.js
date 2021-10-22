@@ -17,15 +17,17 @@ const timeout = (ms) => {
 }
 
 const dataInit = async (pid) => {
-    data = await network.getUserPosts(currUid);
-    data = data.data.data;
+    allData = await network.getPosts();
+    data    = await network.getUserPosts(currUid);
+    allData = allData.data.data;
+    data    = data.data.data;
     
     if (pid) {
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].pid === pid) {
-                data = [data[i]];
+        for (let i = 0; i < allData.length; i++) {
+            if (allData[i].pid === pid) {
+                data = [allData[i]];
 
-                for (let i = 0; i < data.length; i++)   { data[i].imageNames    = data[i].post.images;  }
+                data[i].imageNames = data[i].post.images;
                 return;
             }
         }
