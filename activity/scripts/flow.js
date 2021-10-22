@@ -27,7 +27,7 @@ const dataInit = async (pid) => {
             if (allData[i].pid === pid) {
                 data = [allData[i]];
 
-                data[i].imageNames = data[i].post.images;
+                for (let i = 0; i < data.length; i++) { data[i].imageNames = data[i].post.images; }
                 return;
             }
         }
