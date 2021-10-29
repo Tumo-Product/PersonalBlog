@@ -316,6 +316,7 @@ const postView = {
 
         await timeout(50); $(".postDescription").addClass("openPostDescription");
         $(".postDescription").val(description);
+        $("#charCount").text(description.length);
         if (description.length !== 0) postView.enableBtn("right");
 
         return $(".postDescription");

@@ -417,6 +417,7 @@ button:active p, button:active img {
     color: #5C7CA6;
     font-family: FedraDemi;
     font-size: 1.8vh;
+    width: 89%;
 }
 
 .wideBtn .inside {
@@ -603,8 +604,7 @@ button:active p, button:active img {
     overflow: hidden;
     color: #5C7CA6;
     font-family: FedraBook;
-    /* font-size: 12px; */
-    font-size: 1.33vh;
+    font-size: 15px;
     font-weight: 300;
     margin-top: 2.25%;
     overflow: hidden;
