@@ -18,7 +18,7 @@ const parser = {
         return !title.includes("   ") && title.length > 5 && title.length <= 50;
     },
     isDescriptionCorrect: (description) => {
-        return description.length <= 600 && description.length >= 200;
+        return description.length <= 600 && description.length >= 150;
     },
     isURLValid          : (string) => {
         if (string.includes("<iframe src=") && string.includes(`width="640" height="480" allow="autoplay"></iframe>`)) return true;

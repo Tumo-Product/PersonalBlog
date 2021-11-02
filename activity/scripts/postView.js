@@ -166,7 +166,7 @@ const postView = {
         $("#addBtn img").attr("src", "icons/bigX.png");
     },
     setupTitleView  : async (title) => {
-        $(".postView").append(`<input autocomplete="off" class="postInput" id="titleInput" placeholder="Écris ton titre ici">`);
+        $(".postView").append(`<input autocomplete="off" class="postInput" id="titleInput" placeholder="Écris ton titre ici" maxlength="50">`);
         $("#titleInput").val(title);
         if (title.length !== 0) postView.enableBtn("right");
         return $("#titleInput");
@@ -311,7 +311,7 @@ const postView = {
             <div id="chars">
                 <span id="charCount">0</span> <span>/</span> <span>${limit}</span>
             </div>
-            <textarea class="postDescription" placeholder="Écris ton texte ici">
+            <textarea class="postDescription" placeholder="Écris ton texte ici" maxlength="600">
         `);
 
         await timeout(50); $(".postDescription").addClass("openPostDescription");
