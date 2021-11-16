@@ -1,24 +1,15 @@
 const view      = {
     loaderOpen  : true,
-    currImage   : 0,
+    currPopupImg: 0,
     maxSize     : {width: 900, height: 684},
     window      : {width: 0, height: 0},
     offset      : -1,
-    currPopupImg: 0,
 
     toggleLoader    : () => {
         view.loaderOpen = !view.loaderOpen;
 
         if (view.loaderOpen)    $("#loadingScreen").show();
         else                    $("#loadingScreen").hide();
-    },
-    enableEditButton: (func) => {
-        $("#postButton p").text("Modifie");
-        $("#postButton").attr("onclick", func);
-    },
-    disableEditButton: () => {
-        $("#postButton p").text("Mes publications");
-        $("#postButton").attr("onclick", "toggleMyPosts()");
     },
     makeMap         : (src, parent) => {
         $(parent).append(`<div class="mapCrop"><iframe class="map" src="${src}"></iframe></div>`);
@@ -29,48 +20,81 @@ const view      = {
             <p>#${text}</p><div class="inside"></div>
         </button>`);
     },
-    addPost         : (index, title, date, categories, description, img, videoLink, status) => {
+    addPost         : (index, title, date, categories, description, images, videoLink, status) => {
         if (title === "") title = "N/A";
         if (categories.length === 0) categories = ["N/A"];
         if (description === "") description = "No description added";
-        if (img === undefined) img = "";
-
-        $("#postsView").append(`
-        <div onclick="openPost(${index})" id="p_${index}" class="post ${status}">
-            <div class="content">
-                <p class="title">${title}</p>
-                <div class="spanDiv">
-                    <span class="date">${date}</span>
-                    <span class="postCategory">${categories[0]}</span>
-                </div>
-                <p class="description">${description}</p>
-            </div>
-            <div class="picture">
-                <img src="${img}">
-            </div>
-        </div>`);
-
-        if (img === "" && videoLink === undefined) {
-            $(`#p_${index} img`).remove();
-            $(`#p_${index} .picture`).append("<div><p>N/A</p></div>");   
-        }
-        else if (img === "") {
-            $(`#p_${index} img`).remove();
-            $(`#p_${index} .picture`).append(`<div class="mapCrop">${videoLink}</div>`);
-        }
-        if (description === "No description added") {
-            $(`#p_${index} .description`).addClass("draftDescription");
-        }
-
-        if (categories.length > 1) {
-            $(`#p_${index} .spanDiv span`).last().append(" ...");
-        }
 
         let msg = "";
         if (status === "draft") msg = "Brouillon";
         else if (status === "rejected") msg = "Rejeté";
         else if (status === "moderation") msg = "En cours d'examen";
-        $(`#p_${index}`).append(`<p class="statusText">${msg}</p>`);
+
+        $("#postsView").append(`
+        <div id="p_${index}" class="post ${status} openedPost">
+            <div class="imgMapView">
+                <div class="imageView"></div>
+                <div class="mapContainer"><div class="mapCrop">${videoLink}</div></div>
+            </div>
+            <div class="content">
+                <p class="title">${title}</p>
+                <div class="spanDiv openCategories"></div>
+                <span class="date">${date}</span>
+                <p class="statusText">${msg}</p>
+                <p class="description">${description}</p>
+            </div>
+        </div>`);
+        $(`#p_${index} .mapContainer`).click(() => { openVideo(videoLink); });
+
+        for (let i = 0; i < categories.length; i++) {
+            $(`#p_${index} .spanDiv`).append(`<span class="card">${categories[i]}</span>`);
+        }
+
+        if (categories.length === 0) categories = ["N/A"];
+        let titleFontSize = parser.getCorrectFontSize($(`#p_${index} .title`).text().length);
+        $(`#p_${index} .title`).css({"font-size": `${titleFontSize}vh`});
+
+        if (description === "No description added") {
+            $(`#p_${index} .description`).addClass("openedDraftDescription");
+        } else {
+            $(`#p_${index} .description`).addClass("openedDescription");
+        }
+
+        if (images.length > 0 && videoLink === undefined) $(`#p_${index} .mapContainer`).remove();
+        else if (images.length === 0 && videoLink === undefined) {
+            $(`#p_${index} .mapCrop`).empty();
+            $(`#p_${index} .mapCrop`).append(`<div><p>N/A</p></div>`);
+            $(`#p_${index} .mapContainer`).css("pointer-events", "none");
+        }
+
+        if (images.length > 0) {
+            for (let i = 0; i < images.length; i++) {
+                $(`#p_${index} .imageView`).append(`
+                <div id="img_${i}" onclick="openImage(${index}, ${i})" class="image smooth"><img src="${images[i]}"></div>`);
+
+                $(`#p_${index} .imageView`).append(`<div id="circle_${i}"" class="circle"></div>`);
+                if (i != 0) {
+                    $(`#p_${index} #img_${i}`).css({"pointer-events": "none", "opacity": "0"});
+                    $(`#p_${index} #circle_${i}`).addClass("deactivated");
+                }
+            }
+
+            if (videoLink === undefined) {
+                $(`#p_${index} .imageView`).addClass("bigImgView");
+            }
+        } else {
+            if (videoLink !== undefined) {
+                $(`#p_${index} .mapContainer`).addClass("bigMapView");
+                $(`#p_${index} .imageView`).remove();
+            }
+
+            $(`#p_${index} .imageView`).append(`
+            <div id="img_${0}" onclick="openImage(${index}, 0)" class="image">
+                <div><p>N/A</p></div>
+            </div>`);
+
+            $(`#p_${index} .imageView`).children().css("pointer-events", "none");
+        }
     },
 
     openLoading     : async () => {
@@ -106,8 +130,8 @@ const view      = {
         $(".popupContainer").removeClass("loading");
         
         $(".popupContainer").append(`
-            <img class="bigArrow" id="rightBigArrow" onclick="view.scrollImages(1)" src="icons/bigArrow.png">
-            <img class="bigArrow" id="leftBigArrow"  onclick="view.scrollImages(-1)" src="icons/bigArrow.png">
+            <img class="bigArrow" id="rightBigArrow" onclick="view.scrollPopupImages(1)" src="icons/bigArrow.png">
+            <img class="bigArrow" id="leftBigArrow"  onclick="view.scrollPopupImages(-1)" src="icons/bigArrow.png">
         `);
         
         for (let i = 0; i < images.length; i++) {
@@ -132,7 +156,31 @@ const view      = {
         view.currPopupImg = imgIndex; await timeout(50);
         $(`#bigImg_${imgIndex}`).css("opacity", 1);
     },
-    scrollImages    : async (dir) => {
+
+    scrollImages        : async (postIndex) => {
+        if ($(`#p_${postIndex} .circle`).length === 0) {
+            return;
+        }
+
+        let post = $(`p_${postIndex}`);
+        let imgIndex = 0;
+
+        $(`#p_${postIndex} .circle`).each(function(i) {
+            if (!$(this).hasClass("deactivated")) {
+                imgIndex = i + 1;
+            }
+        });
+
+        if (imgIndex === $(`#p_${postIndex} .circle`).length) imgIndex = 0;
+
+        $(`#p_${postIndex} .circle`).addClass("deactivated");
+        $(`#p_${postIndex} #circle_${imgIndex}`).removeClass("deactivated");
+
+        $(`#p_${postIndex} .image`).css({"pointer-events": "none", "opacity": "0"});
+        $(`#p_${postIndex} #img_${imgIndex}`).css({"pointer-events": "all", "opacity": "1"});
+    },
+
+    scrollPopupImages    : async (dir) => {
         let oldImgIndex = view.currPopupImg;
         if (oldImgIndex + dir < 0 || oldImgIndex + dir == $(".imagePopup").length) return;
         view.currPopupImg += dir;
@@ -235,43 +283,6 @@ const view      = {
         await timeout(100);
         $(".minimize").css("opacity", 1);
     },
-    closePost       : async (index, categories) => {
-        $("#postButton").hide();
-        if (categories.length == 0) categories = ["N/A"];
-        view.currImage = 0;
-        $(`#p_${index} .description`).css("opacity", 0);
-        $(`#p_${index} .statusText`).css("opacity", 0);
-        $(`#p_${index} .imgMapView`).css("height", 0);
-        setTimeout(() => {
-            $(".imgMapView").remove();
-            $(`#p_${index} .minimize`).remove();
-        }, 500);
-
-        await timeout(370);
-        $(`#p_${index}`).removeClass("openedPost");
-        $(`#p_${index} .description`).removeClass("openedDescription openedDraftDescription");
-        $(`#p_${index} .title`).animate({ "font-size": "2.77vh" }, 500);
-        $(`#p_${index} .minimize`).css({"opacity": 0, "pointer-events": "none"});
-        $(".picture").css("height", "90.13%");
-        await timeout(100);
-
-        $(`#p_${index} .date`).clone().appendTo(`#p_${index} .spanDiv`);
-        $(`#p_${index} .spanDiv .date`).removeClass("openedDate");
-        $(".openedDate").remove();
-        $(`#p_${index} .spanDiv .card`).remove();
-        
-        $(`#p_${index} .spanDiv`).removeClass("openCategories");
-        $(`#p_${index} .spanDiv`).append(`<span class="postCategory">${categories[0]}</span>`);
-        if (categories.length > 1)
-            $(`#p_${index} .spanDiv span`).last().append(" ...");
-
-        $("#postsView").css("overflow", "auto");
-        $(`#p_${index}`).attr("onclick", `openPost(${index})`);
-        await timeout (380);
-        $(`#p_${index} .description`).css("opacity", 1);
-        $(`#p_${index} .statusText`).css("opacity", 1);
-        postOpen = -1;
-    },
     hidePosts       : async (i) => {
         if (i !== undefined) {
             setTimeout(() => {
@@ -287,31 +298,9 @@ const view      = {
         await timeout(50);
         $(`#p_${i}`).css({transform: "scale(1)", opacity: 1});
     },
-    scrollPhoto     : async (dir) => {
-        let scroll = false;
-        $(".leftImgBtn").attr("onclick", ""); $(".rightImgBtn").attr("onclick", "");
-
-        setTimeout(() => {
-            $(".leftImgBtn").attr("onclick", "view.scrollPhoto(-1)"); $(".rightImgBtn").attr("onclick", "view.scrollPhoto(1)");
-        }, 500);
-
-        if ((dir > 0 && view.currImage + 1 < $(".image").length) || (dir < 0 && view.currImage - 1 > -1)) {
-            scroll = true;
-        }
-
-        if (scroll) {
-            $(".image").each(function(i) {
-                let offset = parseFloat($(this).css("left")) / window.innerHeight * 100;
-                $(this).css("left", dir > 0 ? `${offset - view.offset}vh` : `${offset + view.offset}vh`);
-            })
-            view.currImage += dir;
-        }
-    },
     toggleCategory  : (index, enable) => {
         $(`#c_${index}`).removeClass(enable ? "outsideShadow"   : "insetShadow");
         $(`#c_${index}`).addClass   (enable ? "insetShadow"     : "outsideShadow");
-        let font = enable ? "1.55vh" : "1.77vh";
-        $(`#c_${index} p`).animate  ({ fontSize: font }, 200);
     },
     scrollToMiddle  : (elem) => {
         $(elem).scrollTop($(elem).width() / 2);
@@ -343,6 +332,21 @@ const view      = {
     enableApproveBtn    : async () => {
         $("#addBtn").removeAttr("disabled");
         $("#addBtn").removeClass("disableApproveBtn");
+    },
+
+    disableEditBtn   : async () => {
+        $("#postButton").attr("disabled", "true");
+        $("#postButton").addClass("disableEditBtn");
+    },
+
+    enableEditBtn    : async () => {
+        $("#postButton").removeAttr("disabled");
+        $("#postButton").removeClass("disableEditBtn");
+    },
+
+    enableEditButton: (func) => {
+        $("#postButton p").text("Modifie");
+        $("#postButton").attr("onclick", func);
     },
 
     setupModView        : async () => {

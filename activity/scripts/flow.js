@@ -45,12 +45,6 @@ const onLoad = async (isMod, uid, pid, actvtId) => {
     
     network.getNewToken();
     await addPosts();
-
-    for (let i = 0; i < categories.length; i++) {
-        view.addCategory(i, categories[i]);
-        categoriesStates.push(false);
-    }
-    
     await handleInitialEvents();
 
     view.scrollToMiddle("#categories");
@@ -68,8 +62,28 @@ const handleInitialEvents = async () => {
             document.getElementById("searchBtn").click();
         }
     });
+
+    let postPositions = [];
+    $(".post").each(function (index) {
+        let marginTop   = parseFloat($(`#p_${index}`).css("margin-top"));
+        let postHeight  = parseFloat($(`#p_${index}`).css("height"));
+        let scrollPos   = postHeight * index;
+        scrollPos += index * marginTop;
+
+        if (index === 0) {
+            postPositions.push(0);
+            return;
+        }
+
+        postPositions.push(scrollPos);
+    });
+
+    handleEditButton(postPositions);
+
     $('#postsView').on('scroll', async function(e) {
-        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight && postOpen == -1) {
+        handleEditButton(postPositions);
+
+        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
             let length = data.length;
             if (queryData.length > 0) {
                 length = queryData.length;
@@ -89,6 +103,27 @@ const handleInitialEvents = async () => {
             }
         }
     });
+
+    setInterval(() => {
+        view.scrollImages(postOpen);
+    }, 5000);
+}
+
+const handleEditButton = async (postPositions) => {
+    let scrollTop = parseFloat($("#postsView").scrollTop());
+    
+    if (postPositions.length > 0) {
+        let closest = postPositions.reduce(function(prev, curr) {
+            return (Math.abs(curr - scrollTop) < Math.abs(prev - scrollTop) ? curr : prev);
+        });
+        postOpen = postPositions.indexOf(closest);
+
+        if (data[postOpen].status === "draft") {
+            view.enableEditBtn();
+        } else {
+            view.disableEditBtn();
+        }
+    }
 }
 
 const resetPosts = async () => {
@@ -111,68 +146,11 @@ const addPosts = async () => {
     }
 
     for (let i = postCount; i < posts.length; i++) {
-        view.addPost(i, posts[i].title, posts[i].date, posts[i].categories, posts[i].description, posts[i].images[0], posts[i].videoLink, dat[i].status);
+        view.addPost(i, posts[i].title, posts[i].date, posts[i].categories, posts[i].description, posts[i].images, posts[i].videoLink, dat[i].status);
         view.makePostAppear(i);
     }
 
     postCount = $(".post").length;
-}
-
-const toggleCategory = async (index) => {
-    let dat = data;
-    view.toggleCategory(index, categoriesStates[index]);
-    categoriesStates[index] = !categoriesStates[index];
-    postCount = 0; postOpen = -1; queryData = [];
-
-    let queries = [], matches = [];
-    for (let i = 0; i < categoriesStates.length; i++) {
-        if (categoriesStates[i] === true) {
-            queries.push(categories[i]);
-        }
-    }
-    view.hidePosts();
-    setTimeout(async () => {
-        resetPosts();
-        for (let i = 0; i < matches.length; i++) {
-            queryData.push(dat[matches[i]]);
-        }
-
-        if (queryData.length > 0)
-            await addPosts();
-    }, 500);
-
-    if (!categoriesStates.includes(true)) {
-        for (let i = 0; i < dat.length; i++) { matches[i] = i;}
-        return;
-    }
-    for (let q = 0; q < queries.length; q++) {
-        for (let p = 0; p < dat.length; p++) {
-            let regexp = new RegExp(`${queries[q]}`, "i");
-            
-            for (let c = 0; c < dat[p].post.categories.length; c++) {
-                if (regexp.test(dat[p].post.categories[c]) && !matches.includes(p)) {
-                    matches.push(p);
-                    continue;
-                }
-            }
-        }
-    }
-}
-
-const login = async () => {
-    let id = $("#id").val();
-
-    if (id === "" || !network.idExists(id)) {
-        // warning
-        view.toggleLoader();
-        return;
-    }
-
-    if ($("#token").val() === await network.getNewToken(id)) {
-        
-    }
-
-    view.toggleLoader();
 }
 
 const addPost = async (dir) => {
@@ -451,9 +429,9 @@ const removeImage = async (i, type) => {
 const openPost = async (i) => {
     if (data.length > 0) {
         if (data[i].status === "draft" || data[i].status === "rejected") {
-            view.enableEditButton("editPost()");
+            view.enableEditBtn("editPost()");
             if (!mod) {
-                $("#postButton").show();
+                $("#postButton").css("display", "flex");
             }
         }
     }
@@ -511,3 +489,19 @@ const search = async () => {
 }
 
 // $(onLoad());
+
+const login = async () => {
+    let id = $("#id").val();
+
+    if (id === "" || !network.idExists(id)) {
+        // warning
+        view.toggleLoader();
+        return;
+    }
+
+    if ($("#token").val() === await network.getNewToken(id)) {
+        
+    }
+
+    view.toggleLoader();
+}

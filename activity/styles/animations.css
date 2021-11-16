@@ -125,19 +125,11 @@
     opacity: 0;
 }
 
-.openedPost {
-    height: 56vh;
-    cursor: unset;
-}
-
-.openedPost .content {
-    width: 93%;
-}
-
 .openedDescription {
-    font-size: 1.44vh;
+    font-size: 1.666vh;
+    line-height: 1.777vh;
     animation: enlargeDescription 1s linear;
-    height: 38%;
+    height: 16vh;
 }
 
 .openedDate {
@@ -153,9 +145,9 @@
     animation: appear 0.5s linear;
 }
 
-.imgMapView {
+/* .imgMapView {
     animation: stretchMapView 0.5s linear;
-}
+} */
 
 @keyframes stretchMapView {
     from {

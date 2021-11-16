@@ -11,37 +11,23 @@
 }
 
 .cardPostView #postsView {
-    margin-top: 50% !important;
+    margin-top: 43% !important;
     height: 0 !important;
 }
 
 .postView {
+    transform: translateX(0) !important;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     position: relative;
-    width: 100% !important;
     overflow: hidden !important;
 }
 
 .postView .openedPost {
     position: absolute;
-    overflow: hidden;
-    width: 79.38%;
-    height: 79.55%;
-    margin: 0 !important;
-    display: flex;
-    justify-content: center;
-}
-
-.postView .openedPost .image {
-    top: 2.95%;
-}
-
-.postView .content {
-    width: 74.1%;
-    margin: 0 !important;
+    transform: scale(0.83);
 }
 
 .postTitle {
@@ -69,7 +55,7 @@
     font-family: FedraDemi;
     font-size: 2.78vh;
     font-weight: 500;
-    color: #98B2D4;
+    color: #5C7CA6;
     transition: 0.5s;
 }
 
@@ -170,6 +156,20 @@
     gap: 1vh;
 }
 
+.categories .addPostCategory {
+    max-width: 41.5vh;
+    white-space: normal;
+    min-height: 4.88vh;
+    height: fit-content;
+    padding-top: 0.666vh;
+    padding-bottom: 0.666vh;
+}
+
+.addPostCategory p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .row {
     width: 100%;   
     display: flex;
@@ -216,10 +216,10 @@
 }
 
 .addPostCategory p {
-    color: #78A6D1;
+    color: #5C7CA6;
     font-weight: 500;
     font-size: 2.77vh;
-    margin-right: 0.68vh;
+    margin-right: 2.38vh;
     min-width: 15.94vh;
     animation: showText 0.5s linear;
 }
@@ -256,7 +256,7 @@
 }
 
 .postMapContainer iframe {
-    height: calc(510px/1.777);
+    height: calc(500px/1.777);
 }
 
 .postMap {
@@ -326,11 +326,6 @@
     cursor: pointer;
 }
 
-.postView .openedPost .date {
-    left: 9.8vh;
-    margin: 0;
-}
-
 #download {
     transition: 0.5s;
     position: absolute;
@@ -375,12 +370,13 @@
 }
 
 #previewText {
+    opacity: 0;
     color: #E86F6F;
     transition: 0.5s;
     position: absolute;
     font-size: 2.444vh;
-    right: 3vh;
-    top: 2vh;
+    right: 5.144vh;
+    top: 2.444vh;
     pointer-events: none;
 }
 

@@ -30,35 +30,33 @@
 
     <div class="main container">
         <div class="subContainer">
-            <div id="mainCard" class="card">
-                <div class="card" id="categories"></div>
-    
-                <div id="posts">
-                    <div id="searchbar">
-                        <input autocomplete="off" placeholder="Recherche" id="search" type="text">
-                        <button onclick="search()" id="searchBtn">
-                            <div class="inside"></div><img src="icons/search.png">
-                        </button>
-                    </div>
-    
-                    <div id="postsView">
-                    </div>
-                </div>
-            </div>
-
             <div id="statusBar">
-                <h1 id="mapName">Mon blog</h1>
+                <div id="searchbar">
+                    <input autocomplete="off" placeholder="Recherche" id="search" type="text">
+                    <button onclick="search()" id="searchBtn">
+                        <div class="inside"></div><img src="icons/search.png">
+                    </button>
+                </div>
+
                 <button onclick="addPost(1)"   id="addBtn">
                     <div class="inside"></div>
                     <img src="icons/plus.png">
                 </button>
-                <button id="postButton" class="wideBtn">
+                <button id="postButton" class="wideBtn disableEditBtn" disabled="disabled" onclick="editPost()">
                     <div class="inside"></div>
-                    <p>Enregistrer le brouillon</p>
+                    <p>Modifie</p>
                 </button>
+            </div>
+
+            <div id="mainCard" class="card">
+                <div id="posts">
+                    <div id="postsView"></div>
+                </div>
+                <div id="categories" class="card"></div>
             </div>
         </div>
     </div>
+
 
     <div class="popupContainer">
     </div>

@@ -91,6 +91,7 @@ const postView = {
             case 5:
                 view.currImage = 0;
                 $(".openedPost").css({"opacity": 0, "height": 0});
+                $("#previewText").css("opacity", 0);
                 await timeout(500);
                 $(".postTitle").css("opacity", 1);
                 $(".postStageExpl").css("opacity", 1);
@@ -111,30 +112,19 @@ const postView = {
         $("#postButton").attr("onclick", "toggleMyPosts()");
         $("#postButton p").text("Mes publications");
 
-        $("#categories").children().each(function () {
-            if (!$(this).hasClass("category")) {
-                $(this).css("transition", "0s");
-                $(this).animate({"opacity": 0}, 500);
-                setTimeout(() => {
-                    $(this).remove();
-                }, 500);
-            }
-        });
-
         await timeout(500);
         $("#categories").removeClass("postView");
         await timeout(500);
-        $("#posts").css({ "width": "65%", margin: "2.88%", "margin-left": 0 });
+        $("#posts").css({ "height": "100%" });
         await timeout(200);
         $("#mainCard").removeClass("cardPostView");
-
-        $(".category").eq(0).css("margin-top", "10.25%");
     },
     firstSetup      : async () => {
         postView.disableDraftBtn();
         $("#addBtn").removeAttr("disabled").removeClass("disableApproveBtn");
 
-        $("#postButton").show();
+        view.enableEditBtn();
+        $("#postButton p").text("Enregistrer le brouillon");
         if (editing) $("#postButton").attr("onclick", "popups.createPopup('edit')");
         else $("#postButton").attr("onclick", `popups.createPopup('draft');`);
 
@@ -147,6 +137,7 @@ const postView = {
         $("#mainCard").addClass("cardPostView"); await timeout(600);
         $("#posts").css({ "width": 0, margin: 0 });
         $("#categories").addClass("postView");
+        await timeout(500);
 
         $(".postView").append(`
             <h1 class="postTitle">Ton nouveau post</h1>
@@ -156,6 +147,7 @@ const postView = {
             <div id="stages">
                 <span id="currentStage">1</span> <span>/</span> <span>5</span>
             </div>
+            <p id="previewText">Aperçu de publication</p>
         `);
         
         $(".leftButton").append (`<div class="inside"></div><img src="icons/arrow.svg">`);
@@ -350,54 +342,86 @@ const postView = {
         } else {
             $("#addBtn").attr("onclick", `popups.createPopup('publishDraft');`);
         }
+
         $(".postTitle").css("opacity", 0);
         $(".postStageExpl").css("opacity", 0);
         $("#stages").css("opacity", 0);
         await timeout(400);
+        $("#previewText").css("opacity", 1);
 
-        view.currImage = 0;
-        let date = new Date().toDateString();
-        date = date.substring(date.indexOf(" ") + 1, date.length); // Remove weekday
+        let date        = new Date().toDateString();
+        date            = date.substring(date.indexOf(" ") + 1, date.length); // Remove weekday
+        let title       = post.title;
+        let categories  = post.categories;
+        let description = post.description;
+        let images      = post.images;
+        let index       = 0;
         $(".postView").append(`
-        <div class="post openedPost">
-            <p id="previewText">Aperçu de publication</p>
-            <span class="date openedDate">${date}</span>
-            <div class="content">
-                <p class="title">${post.title}</p>
-                <div class="spanDiv openCategories"></div>
-                
-                <div class="imgMapView">
-                    <img onclick="view.scrollPhoto(-1)" class="leftImgBtn" src="icons/thin_arrow.svg">
-                    <div class="imageView"></div>
-                    <img onclick="view.scrollPhoto(1)" class="rightImgBtn" src="icons/thin_arrow.svg">
-                    <div class="mapContainer"><div class="mapCrop">${videoLink}</div></div>
-                </div>
-                <p class="description">${post.description}</p>
+        <div id="p_${index}" class="post openedPost">
+            <div class="imgMapView">
+                <div class="imageView"></div>
+                <div class="mapContainer"><div class="mapCrop">${videoLink}</div></div>
             </div>
-        </div>
-        `);
-        if (videoLink === undefined) $(".mapContainer").remove();
-        if (post.images.length === 0) {
-            $(".leftImgBtn").remove();
-            $(".rightImgBtn").remove();
-            $(".imageView").remove();
+            <div class="content">
+                <p class="title">${title}</p>
+                <div class="spanDiv openCategories"></div>
+                <span class="date">${date}</span>
+                <p class="description">${description}</p>
+            </div>
+        </div>`);
+
+        $(`.mapContainer`).click(() => { openVideo(videoLink); });
+
+        for (let i = 0; i < categories.length; i++) {
+            $(`.spanDiv`).append(`<span class="card">${categories[i]}</span>`);
         }
 
-        let titleFontSize = parser.getCorrectFontSize($(`.postView .openedPost .title`).text().length);
-        $(`.postView .openedPost .title`).css("font-size", `${titleFontSize}vh`);
-        $(".openCategories").append(`<span class="card">${post.categories[0]}</span>`);
-        $(`.imageView`).append(`<div id="img_${0}" class="image"><img src="${post.images[0]}"></div>`);
-        view.offset = parseFloat($(`#img_${0}`).css("width")) / window.innerHeight * 100;
+        if (categories.length === 0) categories = ["N/A"];
+        let titleFontSize = parser.getCorrectFontSize($(`.title`).text().length);
+        $(`.title`).css({"font-size": `${titleFontSize}vh`});
 
-        for (let i = 1; i < post.images.length; i++) {
-            $(`.imageView`).append(`<div id="img_${i}" class="image"><img src="${post.images[i]}"></div>`);
-
-            $(`#img_${i}`).css("left", `${view.offset * i}vh`);
+        if (description === "No description added") {
+            $(`.description`).addClass("openedDraftDescription");
+        } else {
+            $(`.description`).addClass("openedDescription");
         }
 
-        $(".mapContainer").click(() => { openVideo(videoLink); });
-        await timeout(100);
-        $(".image").addClass("smooth");
+        if (images.length > 0 && videoLink === undefined) $(`.mapContainer`).remove();
+        else if (images.length === 0 && videoLink === undefined) {
+            $(`.mapCrop`).empty();
+            $(`.mapCrop`).append(`<div><p>N/A</p></div>`);
+            $(`.mapContainer`).css("pointer-events", "none");
+        }
+
+        if (images.length > 0) {
+            for (let i = 0; i < images.length; i++) {
+                $(`.imageView`).append(`
+                <div id="img_${i}" class="image smooth"><img src="${images[i]}"></div>`);
+
+                $(`.imageView`).append(`<div id="circle_${i}"" class="circle"></div>`);
+                if (i != 0) {
+                    $(`#img_${i}`).css({"pointer-events": "none", "opacity": "0"});
+                    $(`#circle_${i}`).addClass("deactivated");
+                }
+            }
+
+            if (videoLink === undefined) {
+                $(`.imageView`).addClass("bigImgView");
+            }
+        } else {
+            if (videoLink !== undefined) {
+                $(`.mapContainer`).addClass("bigMapView");
+                $(`.imageView`).remove();
+            }
+
+            $(`.imageView`).append(`
+            <div id="img_${0}" class="image">
+                <div><p>N/A</p></div>
+            </div>`);
+
+            $(`.imageView`).children().css("pointer-events", "none");
+        }
+        
     },
     addImage    : async (i, imgSrc, type) => {
         $(".imageText").css("opacity", 0);

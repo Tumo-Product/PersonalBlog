@@ -117,40 +117,56 @@ iframe {
 
 .imgMapView {
     display: flex;
-    justify-content: center;
-    overflow: hidden;
+    /* justify-content: center; */
     transition: 0.5s;
-    height: 40%;
+    height: fit-content;
+    width: 100%;
     display: flex;
+    height: 28vh;
 }
 
 .mapContainer {
     cursor: pointer;
     height: 100%;
-    width: 46%;
+    width: 64.3%;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 1.667vh;
-    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
-    margin-left: 1.5%;
+    box-shadow: 1px 5px 4px 0 rgba(222,222,230,0.5), -2px -2px 4px 0 #FEFEFE;
+    margin-left: 3%;
+}
+
+.bigMapView {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+.bigMapView .mapCrop {
+    width: 97.2% !important;
+}
+
+.bigMapView iframe {
+    width: 900px !important;
+    height: calc(900px / 1.777) !important;
 }
 
 .mapCrop {
     pointer-events: none;
     border: none;
-    width: 92%;
+    width: 96.2%;
     height: 92%;
     border-radius: 1vh;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 2px 2px 2px 0 #DEDEE6;
 }
 
 .mapCrop iframe {
-    width: 300px;
-    height: calc(300px/1.777);
+    width: 600px;
+    height: calc(600px/1.777);
 }
 
 .map {
@@ -160,34 +176,58 @@ iframe {
 }
 
 .imageView {
-    height: 100%;
-    width: 47%;
+    width: 28vh;
+    height: 28vh;
     border-radius: 1.667vh;
-    box-shadow: inset -3px -3px 5px 0 #FEFEFE, inset 3px 3px 5px 0 rgba(222,222,230,0.5);
-    margin: 0 1.3%;
+    box-shadow: 1px 5px 4px 0 rgba(222,222,230,0.5), -2px -2px 4px 0 #FEFEFE;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bigImgView {
+    width: 100% !important;
+}
+
+.bigImgView .image {
+    width: 98% !important;
 }
 
 .image {
     cursor: pointer;
     position: absolute;
     overflow: hidden;
-    width: 100%;
-    height: 94.5%;
-    top: 2.75%;
+    width: 93.25%;
+    height: 93.25%;
     display: flex;
     justify-content: center;
-    left: 0.1px;
+    box-shadow: 2px 2px 2px 0 #DEDEE6;
+    border-radius: 1vh;
 }
 
-.image img, .image div {
-    border-radius: 1vh;
-    width: 96%;
+.image img, .image div, .mapCrop div {
+    width: 100%;
     height: 100%;
     object-fit: cover;
     background: rgba(222,222,230,0.5);
     position: relative;
+}
+
+.circle {
+    transition: 0.5s;
+    width: 1vh;
+    height: 1vh;
+    border-radius: 100%;
+    background-color: #F3F3F3;
+    z-index: 5;
+    margin-left: 0.4vh;
+    margin-top: 23vh;
+}
+
+.deactivated {
+    opacity: 0.5;
 }
 
 .leftImgBtn, .rightImgBtn {
@@ -240,8 +280,7 @@ iframe {
     width: 100%;
     box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
     border-radius: 5.388vh;
-    margin-top: 3.45%;
-    margin-bottom: 3%;
+    margin-bottom: 3vh;
     display: flex;
     align-items: center;
     position: relative;
@@ -253,13 +292,15 @@ iframe {
 }
 
 #categories {
-    width   : 26%;
-    height  : 92.83%;
-    margin: 2.88%;
-    margin-right: 3.27%;
+    width   : 93.8555vh;
+    height  : 70.5333vh;
+    margin: 2.88vh;
     overflow: auto;
-    /* scroll-behavior: smooth; */
+    position: absolute;
+    transform: translateX(-140vh);
     transition: 0.7s;
+    top: 18.75vh;
+    background-color: #F3F3F3;
 }
 
 .category {
@@ -293,6 +334,7 @@ iframe {
 }
 
 .category p {
+    transform: scale(1);
     color: #E08689;
     font-family: FedraDemi;
     font-size: 1.55vh;
@@ -302,12 +344,11 @@ iframe {
 }
 
 #posts {
-    margin: 2.88%;
-    margin-left: 0;
+    margin: 2.78%;
     display: flex;
     flex-direction: column;
-    width: 65%;
-    height  : 92.83%;
+    width   : 93.8555vh;
+    height  : 70.5333vh;
     position: relative;
     transition: 0.3s;
 }
@@ -315,13 +356,15 @@ iframe {
 #searchbar {
     display: flex;
     align-items: center;
-    height: 10%;
+    height: 7.111vh;
+    margin-left: 2.25vh;
     transition: 0.5s;
 }
 
 #search {
+    padding-bottom: 2.8vh;
     height: 100%;
-    width: 84.95%;
+    width: 55.22vh;
     font-size: 2.45vh;
     border-radius: 5.555vh;
     transition: 0.5s;
@@ -329,8 +372,8 @@ iframe {
 
 #searchBtn {
     position: relative;
-    height: 90.6%;
-    width:  9.9%;
+    height: 6.444vh;
+    width:  6.444vh;
 
     box-shadow: -3px -3px 3px 0 #FEFEFE, 3px 3px 3px 0 #DEDEE6;
     margin-left: 5%;
@@ -339,6 +382,7 @@ iframe {
     justify-content: center;
     align-items: center;
     transition: 0.6s;
+    flex-shrink: 0;
 }
 
 #searchBtn img {
@@ -376,7 +420,6 @@ button:active p, button:active img {
 }
 
 #postButton {
-    display: none;
     position: absolute;
     right: 12.66%;
 }
@@ -436,8 +479,8 @@ button:active p, button:active img {
 #postsView {
     overflow: auto;
     height: 100%;
-    width: 100%;
-    margin-top: 3.1%;
+    width:  100%;
+    
     border-radius: 2.111vh;
     box-shadow: inset -3px -3px 4px 0 #FEFEFE, inset 3px 3px 4px 0 rgba(222,222,230,0.5);
     flex-shrink: 1;
@@ -509,30 +552,27 @@ button:active p, button:active img {
 }
 
 .post {
+    overflow: hidden;
+    padding: 1.3%;
+    flex-shrink: 0;
     position: relative;
     transition: 0.5s;
-    width: 90.94%;
-    height: 19.05vh;
-    cursor: pointer;
-    margin-left: 2.888vh;
-    margin-top: 2.6vh;
+    width: 93.6%;
+    height: 59.666vh;
+    margin: 3.111vh;
     border-radius: 2.111vh;
     box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
-    display: flex;
     align-items: center;
     animation: postAppear 1s linear;
-}
-
-.post:last-of-type {
-    margin-bottom: 4.5%;
 }
 
 .content {
     position: relative;
     transition: 0.65s;
-    height: 86.65%;
-    margin-left: 3.5%;
-    width: 62%;
+    height: 47%;
+    margin-left: 1.222vh;
+    width: 97%;
+    margin-top: 1.7777vh;
 }
 
 .spanDiv {
@@ -555,24 +595,26 @@ button:active p, button:active img {
 }
 
 .date {
-    font-family: FedraDemi;
+    font-size: 1.666vh;
+    font-family: FedraBook;
+    position: absolute;
+    opacity: 1;
     color: rgba(89,107,128,0.55);
-    font-size: 1.66vh;
+    top: 11.363%;
+    right: 0;
 }
 
 .postCategory {
     font-size: 1.67vh;
-    color: #E08689;    
-    margin-left: 3%;
+    color: #E08689;
 }
 
 .openCategories {
+    padding-left: 0.5vh;
     border-radius: 1vh;
-    padding-left: 0.3vh;
     overflow: auto;
-    height: 6.8%;
-    margin-top: 1%;
-    margin-bottom: 3.7%;
+    height: 3.5vh;
+    display: flex;
     align-items: center;
 }
 
@@ -580,16 +622,15 @@ button:active p, button:active img {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 1.666vh;
     color: #E08689;
     box-shadow: 1px 1px 2px 0 rgba(222,222,230,0.5), -2px -2px 2px 0 #FEFEFE;
     border-radius: 0.666vh;
-    min-width: 22.8%;
+    min-width: 18%;
     width: fit-content;
+    padding-left: 1vh;
+    padding-right: 1vh;
     margin-right: 2%;
-    padding-top: 0.2%;
-    padding-left: 1%;
-    padding-right: 1%;
     height: 2.888vh;
 }
 
@@ -601,28 +642,27 @@ button:active p, button:active img {
     transition: 0.2s;
     width: 100%;
     height: 9.77vh;
-    overflow: hidden;
+    overflow: auto;
     color: #5C7CA6;
     font-family: FedraBook;
     font-size: 15px;
     font-weight: 300;
     margin-top: 2.25%;
-    overflow: hidden;
 }
 
-.picture div, .image div {
+.picture div, .image div, .mapCrop div {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.picture p, .image p {
+.picture p, .image p, .mapCrop p {
     font-family: FedraBold;
     font-size: 2.777vh;
     color: rgba(92,124,166,0.5);
 }
 
-.openedPost .image p {
+.openedPost .image p, .openedPost .mapCrop p {
     font-size: 4vh;
 }
 
@@ -637,20 +677,23 @@ button:active p, button:active img {
 .openedDraftDescription {
     font-size: 3vh !important;
     font-family: Fedra;
-    height: 38%;
+    height: 17.244vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .picture {
     transition: 0.5s;
-    width: 29.3%;
-    height: 90.13%;
+    width: 28.222vh;
+    height: 28.222vh;
     border-radius: 1.666vh;
     box-shadow: 2px 2px 2px 0 rgba(222,222,230,0.5), -2px -2px 2px 0 #FEFEFE;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1%;
-    margin-left: 3.6%;
+    padding: 1.111vh;
+    margin: 1.111vh;
 }
 
 .picture img, .picture div {
@@ -695,6 +738,10 @@ button:active p, button:active img {
     box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE !important;
 }
 
+.outsideShadow p {
+    transform: scale(1.1);
+}
+
 .insetShadow .inside {
     opacity: 1;
 }
@@ -705,58 +752,11 @@ button:active p, button:active img {
 
 .insetShadow p {
     opacity: 0.3;
-    font-size: 1.55vh;
+    transform: scale(1);
 }
 
-/* VVVVV Debug login screen VVVVVV */
-
-#loginPage .card {
-    width   : 450px;
-    height  : 300px;
-    border-radius: 2.111vh;
-    box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-#loginPage input {
-    width: 80%;
-    height: 10%;
-    margin: 10px;
+.category p {
     transition: 0.2s;
-    color: #436980;
-}
-
-#loginPage input::placeholder {
-    color: #43698067;
-}
-
-#loginPage h2 {
-    font-family: FedraBold;
-    font-size: 30px;
-    color: #5C7CA6;
-    margin-bottom: 10px;
-}
-
-#loginPage button {
-    margin-top: 10px;
-    border-radius: 100%;
-    box-shadow: 2px -1px 2px 0 #FEFEFE, -1px 2px 2px 0 rgba(0,0,0,0.16);
-    width: 32px;
-    height: 32px;
-    color: #47677a;
-    padding-top: 2px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#loginPage button p {
-    font-size: 18px;
 }
 
 .confirm {
@@ -803,6 +803,11 @@ button:active p, button:active img {
     box-shadow: 3px 3px 3px 0 rgba(222,222,230,0.5), -2px -2px 3px 0 #FEFEFE;
     background-color: #F3F3F3;
     position: absolute;
+}
+
+.imagePopup iframe {
+    width: 600px;
+    height: calc(600px/1.777);
 }
 
 .imagePopup img {
@@ -873,12 +878,13 @@ button:active p, button:active img {
     color: #DEC554;
     font-family: FedraBold;
     position: absolute;
-    font-size: 1.777vh;
-    top: 2vh;
+    font-size: 1.444vh;
+    top: 7vh;
+    right: 0;
     transition: 0.3s;
 }
 
-.openedPost .statusText {
+/* .openedPost .statusText {
     top: 1.8vh;
     left: 46% !important;
 }
@@ -901,7 +907,7 @@ button:active p, button:active img {
 
 .rejected .statusText {
     left: 30vh;
-}
+} */
 
 .disableApproveBtn img {
     filter: grayscale(100%);
@@ -911,4 +917,64 @@ button:active p, button:active img {
 
 .openedPost .title {
     width: 100% !important;
+}
+
+.disableEditBtn {
+    pointer-events: none; 
+}
+
+.disableEditBtn p {
+    opacity: 0.5;
+    filter: grayscale();
+}
+
+/* VVVVV Debug login screen VVVVVV */
+
+#loginPage .card {
+    width   : 450px;
+    height  : 300px;
+    border-radius: 2.111vh;
+    box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#loginPage input {
+    width: 80%;
+    height: 10%;
+    margin: 10px;
+    transition: 0.2s;
+    color: #436980;
+}
+
+#loginPage input::placeholder {
+    color: #43698067;
+}
+
+#loginPage h2 {
+    font-family: FedraBold;
+    font-size: 30px;
+    color: #5C7CA6;
+    margin-bottom: 10px;
+}
+
+#loginPage button {
+    margin-top: 10px;
+    border-radius: 100%;
+    box-shadow: 2px -1px 2px 0 #FEFEFE, -1px 2px 2px 0 rgba(0,0,0,0.16);
+    width: 32px;
+    height: 32px;
+    color: #47677a;
+    padding-top: 2px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loginPage button p {
+    font-size: 18px;
 }
