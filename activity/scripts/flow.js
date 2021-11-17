@@ -63,25 +63,10 @@ const handleInitialEvents = async () => {
         }
     });
 
-    let postPositions = [];
-    $(".post").each(function (index) {
-        let marginTop   = parseFloat($(`#p_${index}`).css("margin-top"));
-        let postHeight  = parseFloat($(`#p_${index}`).css("height"));
-        let scrollPos   = postHeight * index;
-        scrollPos += index * marginTop;
-
-        if (index === 0) {
-            postPositions.push(0);
-            return;
-        }
-
-        postPositions.push(scrollPos);
-    });
-
-    handleEditButton(postPositions);
+    handleEditButton();
 
     $('#postsView').on('scroll', async function(e) {
-        handleEditButton(postPositions);
+        handleEditButton();
 
         if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
             let length = data.length;
@@ -109,7 +94,22 @@ const handleInitialEvents = async () => {
     }, 5000);
 }
 
-const handleEditButton = async (postPositions) => {
+const handleEditButton = async () => {
+    let postPositions = [];
+    $(".post").each(function (index) {
+        let marginTop   = parseFloat($(`#p_${index}`).css("margin-top"));
+        let postHeight  = parseFloat($(`#p_${index}`).css("height"));
+        let scrollPos   = postHeight * index;
+        scrollPos += index * marginTop;
+
+        if (index === 0) {
+            postPositions.push(0);
+            return;
+        }
+
+        postPositions.push(scrollPos);
+    });
+    
     let scrollTop = parseFloat($("#postsView").scrollTop());
     
     if (postPositions.length > 0) {
@@ -465,8 +465,10 @@ const search = async () => {
         for (let i = 0; i < matches.length; i++) {
             queryData.push(dat[matches[i]]);
         }
-        if (queryData.length > 0)
+        if (queryData.length > 0) {
             await addPosts();
+            handleEditButton();
+        }
     }, 500);
 
     for (let i = 0; i < dat.length; i++) {

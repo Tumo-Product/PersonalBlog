@@ -29,6 +29,8 @@ const view      = {
         if (status === "draft") msg = "Brouillon";
         else if (status === "rejected") msg = "Rejeté";
         else if (status === "moderation") msg = "En cours d'examen";
+ 
+        description = description.replace("\n", "<br><br>");
 
         $("#postsView").append(`
         <div id="p_${index}" class="post ${status} openedPost">
